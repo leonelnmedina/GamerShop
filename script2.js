@@ -35,12 +35,34 @@ const productos = [
         categoria: 'modo historia'},
     
 ];
- productos.forEach((producto) => {
-     console.log(producto.nombre);
-     console.log(producto.precio);
- });
-let productoElegido = prompt('Ingrese el nombre del juego que quiere comprar');
-console.log(productos.find((productos) => productos.nombre === productoElegido));
+ 
+const carrito = [];
 
-const totalCarrito = productos.reduce((acumulador, producto) => acumulador + producto.precio, 0);
-console.log('Si compra todos los juegos el precio total de la compra es $'+totalCarrito);
+productos.forEach((producto) => {
+    console.log(producto.nombre);
+    console.log(producto.precio);
+});
+
+function mostrarProd(){
+    let productoElegido = parseInt(prompt("Ingrese 1)Red Dead Redemption II 2)Grand Theft Auto V 3)EA SPORTS FIFA 23 4)Call of Duty: Modern Warfare II 5)Resident Evil 4"));
+    const prodEncontrado = productos.find(p => p.id === productoElegido);
+    console.log(prodEncontrado);
+    carrito.push(prodEncontrado)
+    console.log(carrito);
+
+    const continuarCompra = confirm('Desea seguir comprando?')
+    
+    if(continuarCompra){
+        mostrarProd()
+    }else{
+        alert('Gracias por comprar en GamerShop!')
+        finalizarCompra()
+    }
+}
+
+function finalizarCompra(){
+    const totalCarrito = carrito.reduce((acumulador, producto) => acumulador += producto.precio,0)
+    console.log('El total de la compra es de $' + totalCarrito);
+}
+
+mostrarProd();
