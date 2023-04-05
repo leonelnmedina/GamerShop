@@ -11,7 +11,7 @@ let total = 0;
 let mensaje = prompt('Desea comprar un producto? (s-si / n-no)');
 while(mensaje == 's' || mensaje=='S'){
     let producto = prompt('1-Red Dead Redemption II\n2-Grand Theft Auto V usb\n3-EA SPORTS FIFA 23\n4-Call of Duty: Modern Warfare II\n5-Resident Evil 4');
-    switch(producto){
+     switch(producto){
         case '1':
             alert('Red Dead Redemption II ... $ 6500   AGREGADO AL CARRO!');
             incrementarTotal(6500);
