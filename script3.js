@@ -1,50 +1,11 @@
-const productos = [{
-    id: 1,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg?t=1671485009",
-    nombre: "Red Dead Redemption 2",
-    precio: 6500,
-    descripcion: "Con más de 175 premios al Juego del año y más de 250 valoraciones perfectas, Red Dead Redemption 2 es la épica historia de Arthur Morgan y la banda de Van der Linde, que huyen por Estados Unidos en los albores del siglo XX. También incluye acceso al mundo multijugador compartido de Red Dead Online."
-},
-{
-    id: 2,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg?t=1678296348",
-    nombre: "Grand Theft Auto V",
-    precio: 4900,
-    descripcion: "Grand Theft Auto V para PC ofrece a los jugadores la opción de explorar el galardonado mundo de Los Santos y el condado de Blaine con una resolución de 4K y disfrutar del juego a 60 fotogramas por segundo."
-},
-{
-    id: 3,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg?t=1680840402",
-    nombre: "Resident Evil 4",
-    precio: 22600,
-    descripcion: "La supervivencia es solo el comienzo. A seis años del desastre biológico en Raccoon City, Leon S. Kennedy, uno de los sobrevivientes, rastreó a la hija secuestrada del presidente hasta una aldea europea aislada, donde algo terrible le ha ocurrido a los lugareños."
-},
-{
-    id: 4,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/header.jpg?t=1682117049",
-    nombre: "EA SPORTS™ FIFA 23",
-    precio: 15700,
-    descripcion: "FIFA 23 te trae todo el realismo del Juego de Todos con la tecnología HyperMotion2, la FIFA World Cup™ masculina y femenina, que estarán disponibles durante la temporada, equipos de clubes femeniles, el Cross-Play* y mucho más."
-},
-{
-    id: 5,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/1774580/header.jpg?t=1681406818",
-    nombre: "STAR WARS Jedi: Survivor™",
-    precio: 15700,
-    descripcion: "La historia de Cal Kestis continúa en STAR WARS Jedi: Survivor™, un juego galáctico de acción y aventura en tercera persona."
-},
-{
-    id: 6,
-    foto: "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg?t=1680026109",
-    nombre: "Cyberpunk 2077",
-    precio: 3500,
-    descripcion: "Cyberpunk 2077 es un RPG de aventura y acción de mundo abierto ambientado en el futuro sombrío de Night City, una peligrosa megalópolis obsesionada con el poder, el glamur y las incesantes modificaciones corporales."
-}
-];
 
-console.table(productos);
-const carrito = [];
+let carrito = [];
 let contenedor = document.getElementById("misprods");
+let finalizarBtn = document.getElementById("finalizar");
+
+//Json
+let productos;
+obtenerJSON();
 
 function renderizarProductos(){
 for(const producto of productos){
@@ -56,7 +17,7 @@ for(const producto of productos){
                 <p class="card-text">${producto.id}</p>
                 <p class="card-text">$ ${producto.precio}</p>
                 <p class="card-text">${producto.descripcion}</p>
-                <button id='btn${producto.id}' class="btn btn-primary align-bottom">Agregar al carrito</button>
+                <button id='btn${producto.id}' class="btn btn-outline-primary align-bottom">Agregar al carrito</button>
             </div>
         </div>   
     `;
@@ -70,12 +31,19 @@ productos.forEach((producto)=>{
 });
 }
 
-renderizarProductos();
-
 function agregarACarrito(prodAAgregar){
 carrito.push(prodAAgregar);
 console.table(carrito);
-alert(`Agregaste ${prodAAgregar.nombre} al carrito!`);
+// alert(`Agregaste ${prodAAgregar.nombre} al carrito!`);
+//Uso sweet alert
+Swal.fire({
+    title: 'Fantástico!',
+    text: `Agregaste ${prodAAgregar.nombre} al carrito!`,
+    imageUrl: prodAAgregar.foto,
+    imageWidth: 400,
+    imageHeight: 200,
+    imageAlt: prodAAgregar.nombre,
+  })
 
 document.getElementById('tablabody').innerHTML += `
     <tr>
@@ -87,4 +55,30 @@ document.getElementById('tablabody').innerHTML += `
 
 let totalCarrito = carrito.reduce((acumulador,producto)=>acumulador+producto.precio,0);
 document.getElementById('total').innerText = 'Total a pagar $: '+totalCarrito;
+}
+
+finalizarBtn.onclick=()=>{
+    carrito=[];
+    document.getElementById('tablabody').innerHTML='';
+    document.getElementById('total').innerText = 'Total a pagar $:';
+    Toastify({
+        text: "Compra realizada con éxito! Podras descargar desde la biblioteca!",
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        style: {
+            background: 'linear-gradient(to right, #6930c3, #72efdd)'
+        }
+    }).showToast();
+    //storage NEW
+    localStorage.removeItem("carrito");
+}
+
+async function obtenerJSON(){
+    const URLJSON = '/productos.json';
+    const respuesta = await fetch(URLJSON);
+    const data = await respuesta.json();
+    productos = data;
+
+    renderizarProductos();
 }
