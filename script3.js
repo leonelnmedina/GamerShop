@@ -10,7 +10,7 @@ obtenerJSON();
 function renderizarProductos(){
 for(const producto of productos){
     contenedor.innerHTML += `
-        <div class="card col-sm-2">
+        <div class="card col-sm-4 text-center">
             <img src=${producto.foto} class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">${producto.nombre}</h5>
